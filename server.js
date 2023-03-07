@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
 
+
 const MongoClient = require('mongodb').MongoClient
 
 const connectionString = 'mongodb+srv://khaintgcs210833:asd@cluster0.ullj32s.mongodb.net/?retryWrites=true&w=majority'
@@ -63,6 +64,17 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
              })
             .catch(error => console.error(error))
         })
+
+        app.delete('/quotes/:id', (req, res) => {
+            const quoteId = req.params.id;
+            quotesCollection.deleteOne({_id: ObjectId(quoteId)})
+                .then(result => {
+                    console.log(`Deleted quote with ID ${quoteId}`);
+                    res.json(`Deleted quote with ID ${quoteId}`);
+                })
+                .catch(error => console.error(error))
+        })
+        
         
         // server -> listen -> port -> 3000
         app.listen(3000, function() {
